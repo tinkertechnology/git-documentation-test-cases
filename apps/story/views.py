@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator
 import pdfkit
 from django.template.loader import get_template
+from django.conf  import settings
 
 @login_required
 def frontpage(request):
@@ -126,10 +127,7 @@ def viewPDFInvoice(request, slug):
 
     return render(request, 'invoice/invoice-template.html', context)
 
-from django_sql_query_to_excel import SqlQueryToExcel
-def test_sql(request):
-    return SqlQueryToExcel.query_to_excel("select 1")
-    pass
+
 
 def printAllVersions(request, projectID):
     #fetch that invoice
@@ -185,7 +183,7 @@ def printAllVersions(request, projectID):
       #Javascript delay is optional
 
     #Remember that location to wkhtmltopdf
-    config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
+    config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)
 
     #IF you have CSS to add to template
     # css1 = os.path.join(settings.CSS_LOCATION, 'assets', 'css', 'bootstrap.min.css')
@@ -250,21 +248,6 @@ def viewDocumentInvoice(request, versionID):
         # messages.error(request, 'Something went wrong')
         # return redirect('invoices')
 
-    #fetch all the products - related to this invoice
-    # products = Product.objects.filter(invoice=invoice)
-
-    # #Get Client Settings
-    # p_settings = Settings.objects.all().first()
-
-    # #Calculate the Invoice Total
-    # invoiceTotal = 0.0
-    # if len(products) > 0:
-    #     for x in products:
-    #         y = float(x.quantity) * float(x.price)
-    #         invoiceTotal += y
-
-
-
     context = {}
     context['version'] = version
     # context['products'] = products
@@ -294,7 +277,7 @@ def viewDocumentInvoice(request, versionID):
       #Javascript delay is optional
 
     #Remember that location to wkhtmltopdf
-    config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
+    config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)
 
     #IF you have CSS to add to template
     # css1 = os.path.join(settings.CSS_LOCATION, 'assets', 'css', 'bootstrap.min.css')

@@ -32,7 +32,11 @@ LOGIN_REDIRECT_URL = 'frontpage'
 LOGOUT_REDIRECT_URL = 'frontpage'
 
 # Application definition
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+WKHTMLTOPDF_PATH = os.getenv("WKHTMLTOPDF_PATH")
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

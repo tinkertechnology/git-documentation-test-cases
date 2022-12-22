@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views
 
-from apps.story.views import frontpage, search, submit, newest, vote, story, listing, viewDocumentInvoice,printAllVersions,test_sql
+from apps.story.views import frontpage, search, submit, newest, vote, story, listing, viewDocumentInvoice,printAllVersions
 from apps.core.views import signup
 
 urlpatterns = [
