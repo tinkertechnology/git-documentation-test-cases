@@ -1,13 +1,52 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+<div class="container">
+    <div class="message is-warning is-hidden-tablet">
+      <p class="message-header">
+        Better on desktop
+      </p>
+      <p class="message-body">
+        This interactive tool works better on larger screens! That's because
+        Bulma columns are <strong>vertical by default</strong>. I recommend
+        revisiting this page later when you're on desktop. 😉
+      </p>
+    </div>
+
+    <div id="grid" class="columns">
+     {% for project in projects %}
+        <div class="column">
+        <a href="/versions/{{project.pk}}">
+            <div class="notification is-link has-text-centered">
+            <p class="title">{{project.fk_organization.name}} {{project.title}}</p>
+            </div>
+        </a>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
     <div class="container">
         <div class="columns">
             <div class="column is-12">
-                <h1 class="title">Welcome to Coding News</h1>
+                <h1 class="title">Documentation Manager</h1>
             </div>
         </div>
 
         {% include 'story/parts/stories.html' %}
     </div>
+
+
+  
+{% endblock %}
+
+{% block breadcrum %}
+<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <!-- <li><a href="#">Documentation</a></li>
+    <li><a href="#">Components</a></li>
+    <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li> -->
+  </ul>
+</nav>
 {% endblock %}

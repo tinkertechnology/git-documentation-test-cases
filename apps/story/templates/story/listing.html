@@ -1,0 +1,99 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div class="container is-widescreen">
+
+      <div class="columns">
+        <div class="column is-three-quarters">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><abbr title="Position">Project</abbr></th>
+                <th>Version</th>
+                <th><abbr title="Played">Prepared By</abbr></th>
+                <th><abbr title="Won">Date</abbr></th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for story in stories %}
+              <tr>
+                <th>{{story.fk_project.title}}{{story.fk_project.fk_organization.name}}</th>
+                <td><a href="{% url 'story' story.id %}" title="Leicester City F.C.">
+                    {{story.title}}</a>
+                </td>
+                <td>{{story.created_by.username}}</td>
+                <td>{{story.created_at}}</td>
+              </tr>
+              {% endfor %}
+     
+            </tbody>
+          </table>
+          <center>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+              {%if stories.has_previous %} {# whether the previous page exists #}
+                  <a  class="pagination-previous" href="?page={{stories.previous_page_number}}">Prev</a> {# link to the prev page #}
+              {% endif %}
+              <ul class="pagination-list">
+                <li>
+                  <a class="pagination-link is-current" aria-label="Page {{stories.number}}" aria-current="page">{{stories.number}}</a>{# the current page number #}
+                </li>
+              </ul>
+              
+              {%if stories.has_next %} {# whether the next page exists #}
+                  <a class="pagination-next" href="?page={{stories.next_page_number}}">Next</a> {# link to the next page #}
+              {% endif %}
+            <nav>
+
+        </center>
+        <hr>
+        <div class="box">
+          <div class="buttons">
+            <a href="/allversionspdf/{{project_ver}}"><button class="button is-primary is-light">Print All</button></a>
+            
+          </div>
+        </div>
+    </div>
+        
+        
+        <div class="column">
+          <aside class="menu">
+            <p class="menu-label">
+              Document Versioning
+            </p>
+            <ul class="menu-list">
+              <li><a></a></li>
+              <li>
+                <a class="is-active">Other Project Documents</a>
+                <ul>
+                  {% for project in projects %}
+                    <li>
+                      <a href="/versions/{{project.pk}}">{{project.title}} </a>
+                    </li> 
+                  {% endfor %}
+                </ul>
+              </li>
+              
+            </ul>
+          </aside>
+          
+        </div>
+        </div>
+        
+      </div>
+
+      
+{% endblock %}
+{% block breadcrum %}
+<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+  <ul>
+    <li>
+    <a href="/">
+      
+      Home
+    </a>
+    </li>
+    <!-- <li><a href="#">Documentation</a></li> -->
+    <li class="is-active"><a href="#" aria-current="page">versions {{stories.all.first.fk_project_id}}</a></li>
+  </ul>
+</nav>
+{% endblock %}

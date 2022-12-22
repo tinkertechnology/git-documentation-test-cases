@@ -1,14 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Story(models.Model):
+
+class Organization(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.name}"
+
+class Project(models.Model):
     title = models.CharField(max_length=255)
-    url = models.URLField()
+    fk_organization = models.ForeignKey(Organization, null=True, on_delete=models.CASCADE, blank=True, related_name="org_projects")
 
+    def __str__(self):
+        return '%s' % self.title
+
+class Story(models.Model):
+    fk_project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="versions", null=True)
+    title = models.CharField(max_length=255)
+    # url = models.URLField()
+    description = models.TextField(null=True)
     number_of_votes = models.IntegerField(default=1)
-
     created_by = models.ForeignKey(User, related_name='stories', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_git_versioning = models.BooleanField(default=True, null=True)
 
     class Meta:
         ordering = ['-created_at']

@@ -3,60 +3,74 @@
 {% block content %}
     <div class="container">
         <div class="columns">
-            <div class="column is-12">
-                <h1 class="title">{{ story.title }}</h1>
-                <h2 class="subtitle">{{ story.number_of_votes }} votes</h2>
+            <div class="column is-three-quarters">
+                <h1 class="title">{{story.fk_project.title}}- {{ story.title }}</h1>
+                <!-- <h2 class="subtitle">{{ story.number_of_votes }} votes</h2> -->
             
                 <strong>By: </strong><a href="{% url 'userprofile' story.created_by.username %}">{{ story.created_by.username }}</a> {{ story.created_at|timesince }} ago<br>
-                <strong>Visit: </strong><a href="{{ story.url }}" target="_blank">{{ story.url }}</a>
+                
             
                 <hr>
-
+                {% autoescape off %} {{story.description}}{% endautoescape %}
                 {% if not story.created_by == request.user %}<a href="{% url 'vote' story.id %}?next_page=story" class="button is-success">Vote</a>{% endif %}
             </div>
-        </div>
+            <div class="column">
+                <nav class="panel">
+                    <p class="panel-heading">
+                      Repositories
+                    </p>
+                    <div class="panel-block">
+                      <p class="control has-icons-left">
+                        <span class="button is-link is-outlined is-fullwidth">{{story.fk_project.title}}</span>
+                        <span class="icon is-left">
+                          <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+                      </p>
+                    </div>
+                  {% for story in stories %}
+                  
+                    <a class="panel-block is-active" href="{% url 'story' story.id %}">
+                      <span class="panel-icon">
+                        <i class="fas fa-book" aria-hidden="true"></i>
+                      </span>
+                      {{ story.title }}
+                    </a>
+                    
+                  {% endfor %}
+
+                    <div class="panel-block">
+                      <button class="button is-link is-outlined is-fullwidth">
+                        <a href="/versions/{{story.fk_project.pk}}">All Versions</a>
+                      </button>
+                    </div>
+                  </nav>
+
+            </div>
+            
+          </div>
 
         <div class="columns">
-            <div class="column is-12">
-                <hr>
-
-                <h2 class="subtitle">Comments</h2>
-
-                {% for comment in story.comments.all %}
-                    <article class="media">
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>{{ comment.created_by.username }}</strong> <small>{{ comment.created_at|timesince }} ago</small><br>
-                                    {{ comment.body }}
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-                {% empty %}
-                    <p>No comments yet!</p>
-                {% endfor %}
-
-                <hr>
-
-                <h2 class="subtitle">Add comment</h2>
-
-                {% if request.user.is_authenticated %}
-                    <form method="post" action=".">
-                        {% csrf_token %}
-
-                        {{ form.as_p }}
-
-                        <div class="field">
-                            <div class="field">
-                                <button class="button is-success">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                {% else %}
-                    <p>Please log in to comment!</p>
-                {% endif %}
+            <div class="column">
+               
             </div>
         </div>
+
+        
+        <div class="columns">
+            <div class="column is-12">
+                <a  class="subtitle" href="/versionspdf/{{story.pk}}">download pdf</a>
+            </div>
+        </div>
+        
     </div>
+{% endblock %}
+
+{% block breadcrum %}
+<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/versions/{{story.fk_project.pk}}">versions {{story.fk_project.pk}}</a></li>
+    <li class="is-active"><a href="#" aria-current="page">versions {{story.title}}</a></li>
+  </ul>
+</nav>
 {% endblock %}
